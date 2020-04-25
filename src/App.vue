@@ -9,9 +9,11 @@
 
 <script>
 import Navigation from "@/components/Navigation.vue";
+import MyStocks from "@/components/MyStocks.vue";
 export default {
   components: {
-    Navigation
+    Navigation,
+    MyStocks
   }
 };
 </script>
