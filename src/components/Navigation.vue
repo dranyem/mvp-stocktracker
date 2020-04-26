@@ -43,7 +43,7 @@
       </ul>-->
     </nav>
 
-    <div class="container-md position-absolute">
+    <div class="container-md">
       <div class="list-group">
         <a
           href="#"
@@ -106,8 +106,9 @@ a:hover {
   text-decoration: none;
 }
 .list-group {
-  max-height: 200px;
-  max-width: 90%;
+  max-height: 300px;
+  position: absolute;
+  z-index: 999;
   overflow: scroll;
   overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
