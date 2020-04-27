@@ -1,9 +1,9 @@
 <template>
-  <div class="card m-3 d-inline-block shadow">
+  <div class="card m-3 d-inline-block shadow rounded">
     <a href="#" class="btn btn-outline-danger btn-sm float-right position-relative m-1">X</a>
     <div class="card-body">
       <h5 class="card-title">Stock Symbol</h5>
-      <h6 class="card-subtitle text-muted mb-2">
+      <h6 class="card-subtitle mb-2">
         Stock Name |
         <span class="font-italic font-weight-lighter h6">Type</span>
       </h6>
@@ -13,10 +13,9 @@
       </p>
       <p class>
         Price Change:
-        <strong>3.07%</strong>
+        <strong class="text-success">3.07%</strong>
       </p>
-      <!-- <a href="#" class="btn btn-outline-success btn-sm p-1 mx-2">View</a> -->
-      <a href="#" class="btn btn-outline-success btn-sm mx-auto d-block">VIEW</a>
+      <a @click="displayStockModal" class="btn btn-outline-light btn-sm d-inline-block p-1">VIEW</a>
     </div>
   </div>
 </template>
@@ -35,6 +34,11 @@ export default {
     stockSymbol() {
       return Object.keys(this.stock)[0];
     }
+  },
+  methods: {
+    displayStockModal() {
+      this.$store.commit("displayModal", { symbol: "SYMBOL", name: "NAME" });
+    }
   }
 };
 </script>
@@ -43,6 +47,7 @@ export default {
 .card {
   width: 250px;
   height: 185px;
-  color: #3a435e;
+  color: white;
+  background-color: #424c6a;
 }
 </style>

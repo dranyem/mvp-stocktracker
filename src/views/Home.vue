@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <MyStocks />
-    <StockInfoModal :isHidden="isModalHidden" />
+    <StockInfoModal :isHidden="isModalHidden" :stockInfo="stock" />
   </div>
 </template>
 
@@ -18,8 +18,8 @@ export default {
     isModalHidden() {
       return this.$store.getters.isModalHidden;
     },
-    test() {
-      return this.$store.getters.test;
+    stock() {
+      return this.$store.getters.stock;
     }
   }
 };
