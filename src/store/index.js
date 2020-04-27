@@ -43,10 +43,10 @@ export default new Vuex.Store({
       if (payload != "") {
         axios.get(
           "https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=" +
-          payload + "&apikey=" + process.env.VUE_APP_ALPHAVANTAGE_KEY
+          payload + "&apikey=" + process.env.VUE_APP_ALPHAVANTAGE_KEY1
         ).then(response => {
           var list = [];
-          for (var i = 0; i < response.data.bestMatches.length; i++) {
+          for (var i = 0; i < response.data["bestMatches"].length; i++) {
             list.push(response.data.bestMatches[i]);
           }
           context.commit("setSearchList", list);
@@ -56,21 +56,38 @@ export default new Vuex.Store({
       }
     },
     displayModal(context, payload) {
-      axios.all([
-        axios.get("https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=" + payload + "&apikey=" + process.env.VUE_APP_ALPHAVANTAGE_KEY),
-        axios.get("https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=" + payload + "&apikey=" + process.env.VUE_APP_ALPHAVANTAGE_KEY),
-        axios.get("https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=" + payload + "&apikey=" + process.env.VUE_APP_ALPHAVANTAGE_KEY),
-        axios.get("https://www.alphavantage.co/query?function=TIME_SERIES_WEEKLY&symbol=" + payload + "&apikey=" + process.env.VUE_APP_ALPHAVANTAGE_KEY),
-        axios.get("https://www.alphavantage.co/query?function=TIME_SERIES_MONTHLY&symbol=IBM" + payload + "&apikey=" + process.env.VUE_APP_ALPHAVANTAGE_KEY)
-      ]).then(axios.spread((search, quote, daily, weekly, monthly) => {
-        console.log(search.data);
-        console.log(quote.data);
-        console.log(daily.data);
-        console.log(weekly.data);
-        console.log(monthly.data);
-      }));
+      if (payload != "") {
+        axios.all([
+          axios.get("https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=" + payload + "&apikey=" + process.env.VUE_APP_ALPHAVANTAGE_KEY2),
+          axios.get("https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=" + payload + "&apikey=" + process.env.VUE_APP_ALPHAVANTAGE_KEY3),
+          // axios.get("https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=" + payload + "&apikey=" + process.env.VUE_APP_ALPHAVANTAGE_KEY4),
+          // axios.get("https://www.alphavantage.co/query?function=TIME_SERIES_WEEKLY&symbol=" + payload + "&apikey=" + process.env.VUE_APP_ALPHAVANTAGE_KEY5),
+          // axios.get("https://www.alphavantage.co/query?function=TIME_SERIES_MONTHLY&symbol=" + payload + "&apikey=" + process.env.VUE_APP_ALPHAVANTAGE_KEY6)
+        ]).then(axios.spread((search, quote,
+          //  daily, weekly, monthly
+        ) => {
+          var searchData, quoteData;
+          //  dailyData, weeklyData, monthlyData;
+          for (var i = 0; i < search.data.bestMatches.length; i++) {
+            if (payload == search.data.bestMatches[i]["1. symbol"]) {
+              searchData = search.data.bestMatches[i];
+              break;
+            }
+          }
+          quoteData = quote.data["Global Quote"];
+          // dailyData = daily.data["Time Series (Daily)"];
+          // weeklyData = weekly.data["Weekly Time Series"];
+          // monthlyData = monthly.data["Monthly Time Series"];
+          context.commit("displayModal", {
+            searchInfo: searchData,
+            quoteInfo: quoteData,
+            // dailyInfo: dailyData,
+            // weeklyInfo: weeklyData,
+            // monthlyInfo: monthlyData
+          });
 
-      context.commit("displayModal", payload);
+        }));
+      }
     }
   },
   modules: {}

@@ -1,25 +1,86 @@
 <template>
-  <div
-    class="myModal position-fixed fixed-top"
-    @click="closeModal"
-    :class="[isHidden? 'd-none':'d-flex']"
-  >
-    <div class="container d-flex h-100">
+  <div class="myModal position-fixed fixed-top" @click="closeModal">
+    <div class="d-flex h-100">
       <div class="row justify-content-center mx-auto align-self-center">
-        <div class="card text-center">
-          <div class="card-header">
-            <strong class="h4">{{stockInfo.symbol}}</strong> -
-            <i>{{stockInfo.name}}</i>
+        <div class="card">
+          <div class="card-header text-center">
+            <strong class="h4">{{stockInfo.searchInfo["1. symbol"]}}</strong> -
+            <i>{{stockInfo.searchInfo["2. name"]}}</i>
             <a @click="closeModal" class="btn btn-outline-danger btn-sm float-right m-0">X</a>
           </div>
           <div class="card-body">
-            <h5 class="card-title">Special title treatment</h5>
-            <p
-              class="card-text"
-            >With supporting text below as a natural lead-in to additional content.</p>
-            <a href="#" class="btn btn-primary">Go somewhere</a>
+            <h5 class="card-title text-center">Stock Information</h5>
+            <div class="row">
+              <div class="col-sm">
+                <p>
+                  Type :
+                  <strong>{{stockInfo.searchInfo["3. type"]}}</strong>
+                </p>
+                <p>
+                  Region/Country :
+                  <strong>{{stockInfo.searchInfo["4. region"]}}</strong>
+                </p>
+                <p>
+                  Market Open Time :
+                  <strong>{{stockInfo.searchInfo["5. marketOpen"]}}</strong>
+                </p>
+                <p>
+                  Market Close Time :
+                  <strong>{{stockInfo.searchInfo["6. marketClose"]}}</strong>
+                </p>
+                <p>
+                  Timezone :
+                  <strong>{{stockInfo.searchInfo["7. timezone"]}}</strong>
+                </p>
+                <p>
+                  Currency :
+                  <strong>{{stockInfo.searchInfo["8. currency"]}}</strong>
+                </p>
+              </div>
+              <div class="col-sm">
+                <p>
+                  Open :
+                  <strong>{{stockInfo.quoteInfo["02. open"]}}</strong>
+                </p>
+                <p>
+                  High :
+                  <strong>{{stockInfo.quoteInfo["03. high"]}}</strong>
+                </p>
+                <p>
+                  Low :
+                  <strong>{{stockInfo.quoteInfo["04. low"]}}</strong>
+                </p>
+                <p>
+                  Price :
+                  <strong>{{stockInfo.quoteInfo["05. price"]}}</strong>
+                </p>
+                <p>
+                  Volume :
+                  <strong>{{stockInfo.quoteInfo["06. volume"]}}</strong>
+                </p>
+                <p>
+                  Latest Trading Day :
+                  <strong>{{stockInfo.quoteInfo["07. latest trading day"]}}</strong>
+                </p>
+                <p>
+                  Previous Close :
+                  <strong>{{stockInfo.quoteInfo["08. previous close"]}}</strong>
+                </p>
+                <p>
+                  Price Change :
+                  <strong>{{stockInfo.quoteInfo["09. change"]}}</strong>
+                </p>
+                <p>
+                  Price Change Percent :
+                  <strong>{{stockInfo.quoteInfo["10. change percent"]}}</strong>
+                </p>
+              </div>
+            </div>
+            <a href="#" class="btn btn-outline-light mx-auto">Add to list</a>
           </div>
-          <div class="card-footer text-muted h6 font-italic">Data provided by AlphaVantage API</div>
+          <div
+            class="card-footer text-muted h6 font-italic text-center"
+          >Data provided by AlphaVantage API</div>
         </div>
       </div>
     </div>
@@ -30,7 +91,6 @@
 export default {
   name: "StockInfoModal",
   props: {
-    isHidden: Boolean,
     stockInfo: Object
   },
   methods: {
@@ -38,23 +98,6 @@ export default {
       this.$store.commit("closeModal");
     }
   }
-  // mounted: {
-  //   stockGlobalQuote() {
-  //     axios
-  //       .get(
-  //         "https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=" +
-  //           this.stockInfo.symbol +
-  //           "&apikey=" +
-  //           process.env.VUE_APP_ALPHAVANTAGE_KEY
-  //       )
-  //       .then(response => {
-  //         console.log(response.data);
-  //       })
-  //       .catch(error => {
-  //         console.log(error);
-  //       });
-  //   }
-  // }
 };
 </script>
 
@@ -68,6 +111,10 @@ export default {
 .card {
   min-width: 300px;
   width: 100%;
-  min-height: 500px;
+  height: 100%;
+  overflow: auto;
+}
+p {
+  font-size: small;
 }
 </style>

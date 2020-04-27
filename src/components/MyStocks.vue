@@ -1,5 +1,5 @@
 <template>
-  <div class="container-fluid bg-transparent border-top border-bottom border-white">
+  <div class="container-fluid bg-transparent border-top border-white">
     <p class="h6 text-left p-2 d-inline">
       Your stock list - Updated as of
       <span

@@ -9,13 +9,13 @@
       </h6>
       <p class="mb-0">
         Price:
-        <strong>100.00</strong>
+        <strong>--.--</strong>
       </p>
       <p class>
         Price Change:
-        <strong class="text-success">3.07%</strong>
+        <strong class="text-success">--.--%</strong>
       </p>
-      <a @click="displayStockModal" class="btn btn-outline-light btn-sm d-inline-block p-1">VIEW</a>
+      <a @click="displayStockModal()" class="btn btn-outline-light btn-sm d-inline-block p-1">VIEW</a>
     </div>
   </div>
 </template>
@@ -30,20 +30,17 @@ export default {
     // stockPrice: Number,
     // stockChangePrice: String
   },
-  computed: {
-    stockSymbol() {
-      return Object.keys(this.stock)[0];
-    }
-  },
+  computed: {},
   methods: {
     displayStockModal() {
-      this.$store.commit("displayModal", { symbol: "SYMBOL", name: "NAME" });
+      var stock = "AAPL";
+      this.$store.dispatch("displayModal", stock);
     }
   }
 };
 </script>
 
-<style>
+<style scoped>
 .card {
   width: 250px;
   height: 185px;
