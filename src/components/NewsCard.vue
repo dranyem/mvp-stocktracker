@@ -1,18 +1,19 @@
 <template>
   <div class="card mb-3 shadow">
     <div class="row no-gutters">
-      <div class="col-md-2">
-        <img class="card-img" />
+      <div class="col-md-4">
+        <img :src="newsInfo.urlToImage" class="card-img my-auto" />
       </div>
-      <div class="col-md-10">
+      <div class="col-md-8">
         <div class="card-body">
-          <h5 class="card-title">Card title</h5>
-          <p
-            class="card-text"
-          >This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+          <h5 class="card-title">{{newsInfo.title}}</h5>
+          <p class="card-text text-break newsDescription">{{newsInfo.description}}</p>
           <p class="card-text">
-            <small class="text-muted">Last updated 3 mins ago</small>
+            <small
+              class="text-muted"
+            >Last updated {{new Date(newsInfo.publishedAt).toLocaleString()}} by {{newsInfo.author}}</small>
           </p>
+          <a :href="newsInfo.url" class="stretched-link" target="_blank"></a>
         </div>
       </div>
     </div>
@@ -21,12 +22,24 @@
 
 <script>
 export default {
-  name: "NewsCard"
+  name: "NewsCard",
+  props: {
+    newsInfo: Object
+  }
 };
 </script>
 
 <style scoped>
 .card {
-  max-height: 175px;
+  max-height: 185px;
+}
+p.newsDescription {
+  font-size: 10px;
+}
+img {
+  width: 100%;
+}
+p.card-title {
+  font-size: 12px;
 }
 </style>
