@@ -76,7 +76,7 @@
                 </p>
               </div>
             </div>
-            <a href="#" class="btn btn-outline-light mx-auto">Add to list</a>
+            <a @click="addToList()" class="btn btn-outline-light mx-auto">Add to list</a>
           </div>
           <div
             class="card-footer text-muted h6 font-italic text-center"
@@ -96,6 +96,9 @@ export default {
   methods: {
     closeModal() {
       this.$store.commit("closeModal");
+    },
+    addToList() {
+      this.$store.commit("addUserStockList", this.stockInfo);
     }
   }
 };
@@ -113,6 +116,7 @@ export default {
   width: 100%;
   height: 100%;
   overflow: auto;
+  background-color: #424c6a;
 }
 p {
   font-size: small;

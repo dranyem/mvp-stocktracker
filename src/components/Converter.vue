@@ -1,6 +1,6 @@
 <template>
   <div class="card mt-2 shadow">
-    <div class="card-header">Popular Stocks</div>
+    <div class="card-header">FOREX/CryptoCurrency</div>
     <div class="card-body">
       <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>
     </div>

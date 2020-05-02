@@ -1,21 +1,14 @@
 <template>
-  <div class="container-fluid bg-transparent border-top border-white">
-    <p class="h6 text-left p-2 d-inline">
+  <div class="listContainer bg-transparent border-top border-white">
+    <p class="h6 text-left p-2 d-inline" @click="add('AAPL')">
       Your stock list - Updated as of
       <span
         class="font-italic font-weight-lighter"
       >{{new Date().toJSON().slice(0,10).replace(/-/g,'-')}}</span>
     </p>
     <div class="myStock">
-      <BaseStock :stock="this.sampleStock" />
-      <BaseStock :stock="this.sampleStock" />
-      <BaseStock :stock="this.sampleStock" />
-      <BaseStock :stock="this.sampleStock" />
-      <BaseStock :stock="this.sampleStock" />
-      <BaseStock :stock="this.sampleStock" />
-      <BaseStock :stock="this.sampleStock" />
-      <BaseStock :stock="this.sampleStock" />
-      <BaseStock :stock="this.sampleStock" />
+      <h1 class="text-center" v-if="userStockList.length==0">No stocks to display</h1>
+      <BaseStock v-for="(item,index) in userStockList" :key="index" :stockSymbol="item" />
     </div>
   </div>
 </template>
@@ -27,23 +20,10 @@ export default {
   components: {
     BaseStock
   },
-  data() {
-    return {
-      sampleStock: {
-        "Global Quote": {
-          "01. symbol": "IBM",
-          "02. open": "122.4100",
-          "03. high": "125.0000",
-          "04. low": "120.7634",
-          "05. price": "124.7200",
-          "06. volume": "4920523",
-          "07. latest trading day": "2020-04-24",
-          "08. previous close": "121.3500",
-          "09. change": "3.3700",
-          "10. change percent": "2.7771%"
-        }
-      }
-    };
+  computed: {
+    userStockList() {
+      return this.$store.getters.userStockList;
+    }
   }
 };
 </script>
@@ -53,5 +33,11 @@ export default {
   overflow-x: auto;
   overflow-y: hidden;
   white-space: nowrap;
+}
+.container-fluid {
+  min-height: 250px;
+}
+.listContainer {
+  height: 250px;
 }
 </style>
