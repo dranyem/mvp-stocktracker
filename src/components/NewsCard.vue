@@ -39,7 +39,7 @@ p.newsDescription {
 img {
   width: 100%;
 }
-p.card-title {
-  font-size: 12px;
+.card-title {
+  font-size: 15px;
 }
 </style>

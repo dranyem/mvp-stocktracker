@@ -13,6 +13,7 @@ export default new Vuex.Store({
     stockInfo: {},
     userStockList: [],
     newsList: [],
+    newsPage: 1,
   },
   mutations: {
     closeModal(state) {
@@ -142,9 +143,25 @@ export default new Vuex.Store({
             process.env.VUE_APP_NEWSAPI_KEY
         )
         .then((response) => {
-          console.log(response.data);
           for (var i = 0; i < response.data.articles.length; i++) {
-            console.log(response.data.articles[i].title);
+            context.commit("addNews", response.data.articles[i]);
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    addMoreNews(context) {
+      this.state.newsPage++;
+      axios
+        .get(
+          "https://newsapi.org/v2/everything?q=stock market&page=" +
+            this.state.newsPage +
+            "&apiKey=" +
+            process.env.VUE_APP_NEWSAPI_KEY
+        )
+        .then((response) => {
+          for (var i = 0; i < response.data.articles.length; i++) {
             context.commit("addNews", response.data.articles[i]);
           }
         })
