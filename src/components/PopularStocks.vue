@@ -2,14 +2,18 @@
   <div class="card mt-2 shadow">
     <div class="card-header">Popular Stocks</div>
     <div class="card-body">
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>
+      <StockSuggestion />
     </div>
   </div>
 </template>
 
 <script>
+import StockSuggestion from "./StockSugestion.vue";
 export default {
-  name: "PopularStocks"
+  name: "PopularStocks",
+  components: {
+    StockSuggestion
+  }
 };
 </script>
 

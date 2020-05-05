@@ -1,13 +1,13 @@
 <template>
   <div class="listContainer bg-transparent border-top border-white">
-    <p class="h6 text-left p-2 d-inline" @click="add('AAPL')">
-      Your stock list - Updated as of
-      <span
-        class="font-italic font-weight-lighter"
-      >{{new Date().toJSON().slice(0,10).replace(/-/g,'-')}}</span>
+    <p class="h6 text-left p-2 d-inline">
+      <a>Click here to update your stocks!</a>
     </p>
     <div class="myStock">
-      <h1 class="text-center" v-if="userStockList.length==0">No stocks to display</h1>
+      <h1
+        class="text-center"
+        v-if="userStockList.length==0"
+      >Start Tracking your Stocks. Search and Add it to your list.</h1>
       <BaseStock v-for="(item,index) in userStockList" :key="index" :stockSymbol="item" />
     </div>
   </div>

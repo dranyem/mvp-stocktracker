@@ -1,25 +1,30 @@
 <template>
-  <div class="card m-3 d-inline-block shadow rounded">
-    <a @click="deleteItem" class="btn btn-outline-danger btn-sm float-right position-relative m-1">X</a>
+  <div
+    class="card m-3 d-inline-block shadow rounded"
+    :class="[stockSymbol.percent>0? 'border-success':'border-danger']"
+  >
+    <a @click="deleteItem" class="btn btn-sm float-right position-relative m-1">X</a>
     <div class="card-body">
-      <h5 class="card-title">{{stockSymbol.searchInfo["1. symbol"]}}</h5>
-      <h6 class="card-subtitle mb-2">
-        {{stockSymbol.searchInfo["2. name"]}} |
-        <span
-          class="font-italic font-weight-lighter h6"
-        >{{stockSymbol.searchInfo["3. type"]}}</span>
-      </h6>
-      <p class="mb-0">
+      <h5 class="card-title mr-3 d-inline-block">{{stockSymbol.symbol}}</h5>
+      <img
+        width="25px"
+        height="25px"
+        :src="['https://storage.googleapis.com/iex/api/logos/'+stockSymbol.symbol+'.png']"
+        class="ml-3 d-inline-block"
+      />
+      <h6 class="card-subtitle mt-1">{{stockSymbol.name}}</h6>
+      <p class="my-0">
         Price:
-        <strong>{{stockSymbol.quoteInfo["05. price"]}}</strong>
+        <strong>{{stockSymbol.price}}</strong>
       </p>
-      <p class>
+      <p class="mb-0">
         Price Change:
         <strong
-          :class="[stockSymbol.quoteInfo['09. change']>0? 'text-success':'text-danger']"
-        >{{stockSymbol.quoteInfo["10. change percent"]}}</strong>
+          :class="[stockSymbol.percent>0? 'text-success':'text-danger']"
+        >{{stockSymbol.percent.toFixed(2)}} %</strong>
       </p>
-      <a @click="displayStockModal()" class="btn btn-outline-light btn-sm d-inline-block p-1">VIEW</a>
+      <p class="text-muted mb-1">Last Updated : {{stockSymbol.date}}</p>
+      <a @click="displayStockModal()" class="btn btn-outline-light btn-sm">VIEW</a>
     </div>
   </div>
 </template>
@@ -33,13 +38,9 @@ export default {
   computed: {},
   methods: {
     displayStockModal() {
-      this.$store.dispatch(
-        "displayModal",
-        this.stockSymbol.searchInfo["1. symbol"]
-      );
+      this.$store.dispatch("displayModal", this.stockSymbol.symbol);
     },
     deleteItem() {
-      console.log("clicked " + this.stockSymbol);
       this.$store.commit("deleteUserStockList", this.stockSymbol);
     }
   }
@@ -49,12 +50,15 @@ export default {
 <style scoped>
 .card {
   width: 250px;
-  height: 185px;
+  height: 190px;
   background-color: #424c6a;
   text-overflow: ellipsis;
   overflow: hidden;
 }
 a:hover {
-  color: #3a435e;
+  color: red;
+}
+p.text-muted {
+  font-size: 12px;
 }
 </style>

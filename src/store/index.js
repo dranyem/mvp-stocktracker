@@ -31,8 +31,7 @@ export default new Vuex.Store({
     },
     deleteUserStockList(state, payload) {
       state.userStockList = state.userStockList.filter(
-        (stock) =>
-          stock.searchInfo["1. symbol"] !== payload.searchInfo["1. symbol"]
+        (stock) => stock.symbol !== payload.symbol
       );
     },
     // setNewsList(state, payload) {
@@ -88,52 +87,66 @@ export default new Vuex.Store({
     displayModal(context, payload) {
       if (payload != "") {
         axios
-          .all([
-            axios.get(
-              "https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=" +
-                payload +
-                "&apikey=" +
-                process.env.VUE_APP_ALPHAVANTAGE_KEY2
-            ),
-            axios.get(
-              "https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=" +
-                payload +
-                "&apikey=" +
-                process.env.VUE_APP_ALPHAVANTAGE_KEY3
-            ),
-            // axios.get("https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=" + payload + "&apikey=" + process.env.VUE_APP_ALPHAVANTAGE_KEY4),
-            // axios.get("https://www.alphavantage.co/query?function=TIME_SERIES_WEEKLY&symbol=" + payload + "&apikey=" + process.env.VUE_APP_ALPHAVANTAGE_KEY5),
-            // axios.get("https://www.alphavantage.co/query?function=TIME_SERIES_MONTHLY&symbol=" + payload + "&apikey=" + process.env.VUE_APP_ALPHAVANTAGE_KEY6)
-          ])
-          .then(
-            axios.spread(
-              (
-                search,
-                quote
-                //  daily, weekly, monthly
-              ) => {
-                var searchData, quoteData;
-                //  dailyData, weeklyData, monthlyData;
-                for (var i = 0; i < search.data.bestMatches.length; i++) {
-                  if (payload == search.data.bestMatches[i]["1. symbol"]) {
-                    searchData = search.data.bestMatches[i];
-                    break;
-                  }
-                }
-                quoteData = quote.data["Global Quote"];
-                // dailyData = daily.data["Time Series (Daily)"];
-                // weeklyData = weekly.data["Weekly Time Series"];
-                // monthlyData = monthly.data["Monthly Time Series"];
-                context.commit("displayModal", {
-                  searchInfo: searchData,
-                  quoteInfo: quoteData,
-                  // dailyInfo: dailyData,
-                  // weeklyInfo: weeklyData,
-                  // monthlyInfo: monthlyData
-                });
-              }
-            )
-          );
+          .get(
+            "https://cloud.iexapis.com/stable/stock/" +
+              payload.toLowerCase() +
+              "/batch?types=quote,company&displayPercent=true&token=" +
+              process.env.VUE_APP_IEX_KEY
+          )
+          .then((response) => {
+            context.commit("displayModal", response.data);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+
+        // axios
+        //   .all([
+        //     axios.get(
+        //       "https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=" +
+        //         payload +
+        //         "&apikey=" +
+        //         process.env.VUE_APP_ALPHAVANTAGE_KEY2
+        //     ),
+        //     axios.get(
+        //       "https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=" +
+        //         payload +
+        //         "&apikey=" +
+        //         process.env.VUE_APP_ALPHAVANTAGE_KEY3
+        //     ),
+        //     // axios.get("https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=" + payload + "&apikey=" + process.env.VUE_APP_ALPHAVANTAGE_KEY4),
+        //     // axios.get("https://www.alphavantage.co/query?function=TIME_SERIES_WEEKLY&symbol=" + payload + "&apikey=" + process.env.VUE_APP_ALPHAVANTAGE_KEY5),
+        //     // axios.get("https://www.alphavantage.co/query?function=TIME_SERIES_MONTHLY&symbol=" + payload + "&apikey=" + process.env.VUE_APP_ALPHAVANTAGE_KEY6)
+        //   ])
+        //   .then(
+        //     axios.spread(
+        //       (
+        //         search,
+        //         quote
+        //         //  daily, weekly, monthly
+        //       ) => {
+        //         var searchData, quoteData;
+        //         //  dailyData, weeklyData, monthlyData;
+        //         for (var i = 0; i < search.data.bestMatches.length; i++) {
+        //           if (payload == search.data.bestMatches[i]["1. symbol"]) {
+        //             searchData = search.data.bestMatches[i];
+        //             break;
+        //           }
+        //         }
+        //         quoteData = quote.data["Global Quote"];
+        //         // dailyData = daily.data["Time Series (Daily)"];
+        //         // weeklyData = weekly.data["Weekly Time Series"];
+        //         // monthlyData = monthly.data["Monthly Time Series"];
+        //         context.commit("displayModal", {
+        //           searchInfo: searchData,
+        //           quoteInfo: quoteData,
+        //           // dailyInfo: dailyData,
+        //           // weeklyInfo: weeklyData,
+        //           // monthlyInfo: monthlyData
+        //         });
+        //       }
+        //     )
+        //   );
       }
     },
     newsList(context) {

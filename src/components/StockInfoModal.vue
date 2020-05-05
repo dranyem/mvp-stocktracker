@@ -4,83 +4,97 @@
       <div class="row justify-content-center mx-auto align-self-center">
         <div class="card">
           <div class="card-header text-center">
-            <strong class="h4">{{stockInfo.searchInfo["1. symbol"]}}</strong> -
-            <i>{{stockInfo.searchInfo["2. name"]}}</i>
-            <a @click="closeModal" class="btn btn-outline-danger btn-sm float-right m-0">X</a>
+            <strong class="h4">{{stockInfo.company.symbol}}</strong> -
+            <i>{{stockInfo.company.companyName}}</i>
+            <img
+              width="25px"
+              height="25px"
+              :src="['https://storage.googleapis.com/iex/api/logos/'+stockInfo.company.symbol+'.png']"
+              class="ml-3 d-inline-block"
+            />
+            <a
+              v-if="!checkUserStockList()"
+              @click="addToList()"
+              class="btn btn-outline-success btn-sm float-left m-0"
+            >
+              +
+              <span class="text-light">Add To List</span>
+            </a>
+
+            <a @click="closeModal" class="btn btn-outline-danger btn-sm float-right m-0">x Close</a>
           </div>
           <div class="card-body">
             <h5 class="card-title text-center">Stock Information</h5>
             <div class="row">
+              <p>{{stockInfo.company.description}}</p>
+            </div>
+            <div class="row">
               <div class="col-sm">
                 <p>
-                  Type :
-                  <strong>{{stockInfo.searchInfo["3. type"]}}</strong>
+                  Primary Exchange :
+                  <strong>{{stockInfo.company.exchange}}</strong>
                 </p>
                 <p>
-                  Region/Country :
-                  <strong>{{stockInfo.searchInfo["4. region"]}}</strong>
+                  Industry :
+                  <strong>{{stockInfo.company.industry}}</strong>
                 </p>
                 <p>
-                  Market Open Time :
-                  <strong>{{stockInfo.searchInfo["5. marketOpen"]}}</strong>
+                  Website :
+                  <strong>{{stockInfo.company.website}}</strong>
                 </p>
                 <p>
-                  Market Close Time :
-                  <strong>{{stockInfo.searchInfo["6. marketClose"]}}</strong>
+                  CEO :
+                  <strong>{{stockInfo.company.CEO}}</strong>
                 </p>
                 <p>
-                  Timezone :
-                  <strong>{{stockInfo.searchInfo["7. timezone"]}}</strong>
+                  Address :
+                  <strong>{{stockInfo.company.address}} {{stockInfo.company.city}} {{stockInfo.company.state}} {{stockInfo.company.country}} {{stockInfo.company.zip}}</strong>
                 </p>
                 <p>
-                  Currency :
-                  <strong>{{stockInfo.searchInfo["8. currency"]}}</strong>
+                  Phone Number :
+                  <strong>{{stockInfo.company.phone}}</strong>
                 </p>
               </div>
               <div class="col-sm">
                 <p>
-                  Open :
-                  <strong>{{stockInfo.quoteInfo["02. open"]}}</strong>
+                  Latest Price :
+                  <strong>{{stockInfo.quote.latestPrice}}</strong>
                 </p>
                 <p>
-                  High :
-                  <strong>{{stockInfo.quoteInfo["03. high"]}}</strong>
-                </p>
-                <p>
-                  Low :
-                  <strong>{{stockInfo.quoteInfo["04. low"]}}</strong>
-                </p>
-                <p>
-                  Price :
-                  <strong>{{stockInfo.quoteInfo["05. price"]}}</strong>
-                </p>
-                <p>
-                  Volume :
-                  <strong>{{stockInfo.quoteInfo["06. volume"]}}</strong>
-                </p>
-                <p>
-                  Latest Trading Day :
-                  <strong>{{stockInfo.quoteInfo["07. latest trading day"]}}</strong>
+                  Latest Update :
+                  <strong>{{new Date(stockInfo.quote.latestUpdate).toLocaleString()}}</strong>
                 </p>
                 <p>
                   Previous Close :
-                  <strong>{{stockInfo.quoteInfo["08. previous close"]}}</strong>
+                  <strong>{{stockInfo.quote.previousClose}}</strong>
+                </p>
+                <p>
+                  Previous Volume :
+                  <strong>{{stockInfo.quote.previousVolume}}</strong>
                 </p>
                 <p>
                   Price Change :
-                  <strong>{{stockInfo.quoteInfo["09. change"]}}</strong>
+                  <strong
+                    :class="[stockInfo.quote.change>0? 'text-success':'text-danger']"
+                  >{{stockInfo.quote.change}}</strong>
                 </p>
                 <p>
-                  Price Change Percent :
-                  <strong>{{stockInfo.quoteInfo["10. change percent"]}}</strong>
+                  Price Change Percentage :
+                  <strong
+                    :class="[stockInfo.quote.change>0? 'text-success':'text-danger']"
+                  >{{stockInfo.quote.changePercent.toFixed(2)}}%</strong>
                 </p>
               </div>
             </div>
-            <a @click="addToList()" class="btn btn-outline-light mx-auto">Add to list</a>
+            <hr />
+            <div class="row">
+              <h5 class="card-title text-center">Stock Chart</h5>
+              <!-- <div class="ct-chart ct-perfect-fourth"></div> -->
+            </div>
           </div>
-          <div
-            class="card-footer text-muted h6 font-italic text-center"
-          >Data provided by AlphaVantage API</div>
+          <div class="card-footer text-muted h6 font-italic text-center">
+            <a href="https://iexcloud.io">Data provided by IEX Cloud</a>
+          </div>
         </div>
       </div>
     </div>
@@ -98,7 +112,23 @@ export default {
       this.$store.commit("closeModal");
     },
     addToList() {
-      this.$store.commit("addUserStockList", this.stockInfo);
+      this.$store.commit("addUserStockList", {
+        symbol: this.stockInfo.company.symbol,
+        name: this.stockInfo.company.companyName,
+        price: this.stockInfo.quote.latestPrice,
+        percent: this.stockInfo.quote.changePercent,
+        date: new Date(this.stockInfo.quote.latestUpdate).toDateString()
+      });
+    },
+    checkUserStockList() {
+      for (var i = 0; i < this.$store.getters.userStockList.length; i++) {
+        if (
+          this.$store.getters.userStockList[i].symbol ==
+          this.stockInfo.company.symbol
+        ) {
+          return true;
+        }
+      }
     }
   }
 };
@@ -112,7 +142,6 @@ export default {
   z-index: 999;
 }
 .card {
-  min-width: 300px;
   width: 100%;
   height: 100%;
   overflow: auto;
@@ -120,5 +149,9 @@ export default {
 }
 p {
   font-size: small;
+}
+hr {
+  color: white;
+  background-color: white;
 }
 </style>
