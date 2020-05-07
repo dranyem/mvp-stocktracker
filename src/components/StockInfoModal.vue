@@ -2,7 +2,7 @@
   <div class="myModal position-fixed fixed-top" @click="closeModal">
     <div class="d-flex h-100">
       <div class="row justify-content-center mx-auto align-self-center">
-        <div class="card">
+        <div class="card m-xl-5">
           <div class="card-header text-center">
             <strong class="h4">{{stockInfo.company.symbol}}</strong> -
             <i>{{stockInfo.company.companyName}}</i>
@@ -21,9 +21,17 @@
               <span class="text-light">Add To List</span>
             </a>
 
-            <a @click="closeModal" class="btn btn-outline-danger btn-sm float-right m-0">x Close</a>
+            <!-- <a @click="closeModal" class="btn btn-outline-danger btn-sm float-right m-0">x Close</a> -->
+            <button
+              @click="closeModal"
+              type="button"
+              class="close float-right text-light"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
           </div>
-          <div class="card-body">
+          <div class="card-body p-lg-5">
             <h5 class="card-title text-center">Stock Information</h5>
             <div class="row">
               <p>{{stockInfo.company.description}}</p>
@@ -86,11 +94,10 @@
                 </p>
               </div>
             </div>
-            <hr />
-            <div class="row">
-              <h5 class="card-title text-center">Stock Chart</h5>
-              <!-- <div class="ct-chart ct-perfect-fourth"></div> -->
-            </div>
+            <a
+              class="btn btn-info btn-lg btn-block mt-3 text-break"
+            >Click here to view chart for this stock</a>
+            <!-- <hr /> -->
           </div>
           <div class="card-footer text-muted h6 font-italic text-center">
             <a href="https://iexcloud.io">Data provided by IEX Cloud</a>
@@ -110,6 +117,13 @@ export default {
   methods: {
     closeModal() {
       this.$store.commit("closeModal");
+      this.$store.commit("updateUserStockList", {
+        symbol: this.stockInfo.company.symbol,
+        name: this.stockInfo.company.companyName,
+        price: this.stockInfo.quote.latestPrice,
+        percent: this.stockInfo.quote.changePercent,
+        date: new Date(this.stockInfo.quote.latestUpdate).toDateString()
+      });
     },
     addToList() {
       this.$store.commit("addUserStockList", {
@@ -142,10 +156,12 @@ export default {
   z-index: 999;
 }
 .card {
-  width: 100%;
-  height: 100%;
-  overflow: auto;
+  max-width: 90vw;
   background-color: #424c6a;
+}
+.card-body {
+  max-height: 80vh;
+  overflow: auto;
 }
 p {
   font-size: small;
@@ -153,5 +169,8 @@ p {
 hr {
   color: white;
   background-color: white;
+}
+.close :hover {
+  color: red;
 }
 </style>

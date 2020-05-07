@@ -1,14 +1,17 @@
 <template>
   <div class="listContainer bg-transparent border-top border-white">
-    <p class="h6 text-left p-2 d-inline">
-      <a>Click here to update your stocks!</a>
-    </p>
+    <a
+      v-if="!isListUpdated"
+      class="btn btn-outline-info btn-sm mt-1 mb-0 p-1"
+      @click="updateList"
+    >Click here to update</a>
+    <p v-else class="h6 text-left p-2 d-inline">Stock track list is up to date</p>
     <div class="myStock">
       <h1
         class="text-center"
         v-if="userStockList.length==0"
       >Start Tracking your Stocks. Search and Add it to your list.</h1>
-      <BaseStock v-for="(item,index) in userStockList" :key="index" :stockSymbol="item" />
+      <BaseStock v-for="(item,index) in userStockList" :key="index" :stock="item" />
     </div>
   </div>
 </template>
@@ -20,9 +23,28 @@ export default {
   components: {
     BaseStock
   },
+  data() {
+    return {
+      isListUpdated: true
+    };
+  },
   computed: {
     userStockList() {
       return this.$store.getters.userStockList;
+    }
+  },
+  mount() {
+    for (var i = 0; i < this.userStockList().length; i++) {
+      const currDate = new Date().toDateString();
+      if (this.userStockList()[i].date != currDate) {
+        this.isListUpdated = false;
+        break;
+      }
+    }
+  },
+  methods: {
+    updateList() {
+      this.$store.dispatch("updateList");
     }
   }
 };

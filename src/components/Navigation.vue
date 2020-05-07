@@ -1,6 +1,6 @@
 <template>
   <div>
-    <nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-transparent">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-transparent">
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <div class="input-group input-group-lg">
           <div class="input-group-prepend">

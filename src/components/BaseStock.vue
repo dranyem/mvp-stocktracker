@@ -1,29 +1,36 @@
 <template>
   <div
-    class="card m-3 d-inline-block shadow rounded"
-    :class="[stockSymbol.percent>0? 'border-success':'border-danger']"
+    class="card m-2 d-inline-block shadow rounded"
+    :class="[stock.percent>0? 'border-success':'border-danger']"
   >
-    <a @click="deleteItem" class="btn btn-sm float-right position-relative m-1">X</a>
+    <button
+      @click="deleteItem"
+      type="button"
+      class="close float-right m-2 text-light"
+      aria-label="Close"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
     <div class="card-body">
-      <h5 class="card-title mr-3 d-inline-block">{{stockSymbol.symbol}}</h5>
+      <h5 class="card-title mr-3 d-inline-block">{{stock.symbol}}</h5>
       <img
         width="25px"
         height="25px"
-        :src="['https://storage.googleapis.com/iex/api/logos/'+stockSymbol.symbol+'.png']"
+        :src="['https://storage.googleapis.com/iex/api/logos/'+stock.symbol+'.png']"
         class="ml-3 d-inline-block"
       />
-      <h6 class="card-subtitle mt-1">{{stockSymbol.name}}</h6>
+      <h6 class="card-subtitle mt-1">{{stock.name}}</h6>
       <p class="my-0">
         Price:
-        <strong>{{stockSymbol.price}}</strong>
+        <strong>{{stock.price}}</strong>
       </p>
       <p class="mb-0">
         Price Change:
         <strong
-          :class="[stockSymbol.percent>0? 'text-success':'text-danger']"
-        >{{stockSymbol.percent.toFixed(2)}} %</strong>
+          :class="[stock.percent>0? 'text-success':'text-danger']"
+        >{{stock.percent.toFixed(2)}} %</strong>
       </p>
-      <p class="text-muted mb-1">Last Updated : {{stockSymbol.date}}</p>
+      <p class="text-muted mb-1">Last Updated : {{stock.date}}</p>
       <a @click="displayStockModal()" class="btn btn-outline-light btn-sm">VIEW</a>
     </div>
   </div>
@@ -33,15 +40,15 @@
 export default {
   name: "BaseStock",
   props: {
-    stockSymbol: Object
+    stock: Object
   },
   computed: {},
   methods: {
     displayStockModal() {
-      this.$store.dispatch("displayModal", this.stockSymbol.symbol);
+      this.$store.dispatch("displayModal", this.stock.symbol);
     },
     deleteItem() {
-      this.$store.commit("deleteUserStockList", this.stockSymbol);
+      this.$store.commit("deleteUserStockList", this.stock);
     }
   }
 };
@@ -55,10 +62,10 @@ export default {
   text-overflow: ellipsis;
   overflow: hidden;
 }
-a:hover {
-  color: red;
-}
 p.text-muted {
   font-size: 12px;
+}
+.close :hover {
+  color: red;
 }
 </style>

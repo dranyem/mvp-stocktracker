@@ -40,6 +40,16 @@ export default new Vuex.Store({
     addNews(state, payload) {
       state.newsList.push(payload);
     },
+    updateUserStockList(state, payload) {
+      for (var i = 0; i < state.userStockList.length; i++) {
+        if (state.userStockList[i].symbol == payload.symbol) {
+          state.userStockList[i].date = payload.date;
+          state.userStockList[i].price = payload.price;
+          state.userStockList[i].percent = payload.percent;
+          break;
+        }
+      }
+    },
   },
   getters: {
     isModalHidden(state) {
@@ -99,54 +109,6 @@ export default new Vuex.Store({
           .catch((error) => {
             console.log(error);
           });
-
-        // axios
-        //   .all([
-        //     axios.get(
-        //       "https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=" +
-        //         payload +
-        //         "&apikey=" +
-        //         process.env.VUE_APP_ALPHAVANTAGE_KEY2
-        //     ),
-        //     axios.get(
-        //       "https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=" +
-        //         payload +
-        //         "&apikey=" +
-        //         process.env.VUE_APP_ALPHAVANTAGE_KEY3
-        //     ),
-        //     // axios.get("https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=" + payload + "&apikey=" + process.env.VUE_APP_ALPHAVANTAGE_KEY4),
-        //     // axios.get("https://www.alphavantage.co/query?function=TIME_SERIES_WEEKLY&symbol=" + payload + "&apikey=" + process.env.VUE_APP_ALPHAVANTAGE_KEY5),
-        //     // axios.get("https://www.alphavantage.co/query?function=TIME_SERIES_MONTHLY&symbol=" + payload + "&apikey=" + process.env.VUE_APP_ALPHAVANTAGE_KEY6)
-        //   ])
-        //   .then(
-        //     axios.spread(
-        //       (
-        //         search,
-        //         quote
-        //         //  daily, weekly, monthly
-        //       ) => {
-        //         var searchData, quoteData;
-        //         //  dailyData, weeklyData, monthlyData;
-        //         for (var i = 0; i < search.data.bestMatches.length; i++) {
-        //           if (payload == search.data.bestMatches[i]["1. symbol"]) {
-        //             searchData = search.data.bestMatches[i];
-        //             break;
-        //           }
-        //         }
-        //         quoteData = quote.data["Global Quote"];
-        //         // dailyData = daily.data["Time Series (Daily)"];
-        //         // weeklyData = weekly.data["Weekly Time Series"];
-        //         // monthlyData = monthly.data["Monthly Time Series"];
-        //         context.commit("displayModal", {
-        //           searchInfo: searchData,
-        //           quoteInfo: quoteData,
-        //           // dailyInfo: dailyData,
-        //           // weeklyInfo: weeklyData,
-        //           // monthlyInfo: monthlyData
-        //         });
-        //       }
-        //     )
-        //   );
       }
     },
     newsList(context) {
@@ -181,6 +143,32 @@ export default new Vuex.Store({
         .catch((error) => {
           console.log(error);
         });
+    },
+    updateList(context) {
+      const currentDate = new Date().toDateString();
+      for (var i = 0; i < this.state.userStockList.length; i++) {
+        if (this.state.userStockList[i].date != currentDate) {
+          axios
+            .get(
+              "https://cloud.iexapis.com/stable/stock/" +
+                this.state.userStockList[i].symbol +
+                "/batch?types=quote,company&displayPercent=true&token=" +
+                process.env.VUE_APP_IEX_KEY
+            )
+            .then((response) => {
+              context.commit("updateUserStockList", {
+                symbol: response.data.company.symbol,
+                name: response.data.company.companyName,
+                price: response.data.quote.latestPrice,
+                percent: response.data.quote.changePercent,
+                date: new Date(response.data.quote.latestUpdate).toDateString(),
+              });
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+        }
+      }
     },
   },
   modules: {},
