@@ -94,10 +94,14 @@
                 </p>
               </div>
             </div>
-            <a
+            <!-- <a
               class="btn btn-info btn-lg btn-block mt-3 text-break"
-            >Click here to view chart for this stock</a>
-            <!-- <hr /> -->
+            >Click here to view chart for this stock</a>-->
+            <hr />
+            <h5 class="card-title text-center">Stock Chart</h5>
+            <div>
+              <canvas id="myChart"></canvas>
+            </div>
           </div>
           <div class="card-footer text-muted h6 font-italic text-center">
             <a href="https://iexcloud.io">Data provided by IEX Cloud</a>
@@ -109,6 +113,7 @@
 </template>
 
 <script>
+import Chart from "chart.js";
 export default {
   name: "StockInfoModal",
   props: {
@@ -143,7 +148,64 @@ export default {
           return true;
         }
       }
+    },
+    createChart() {
+      var stockLabel = [];
+      var stockData = [];
+
+      for (var i = 0; i < this.stockInfo.chart.length; i++) {
+        stockLabel.push(this.stockInfo.chart[i].date);
+        stockData.push(this.stockInfo.chart[i].close);
+      }
+      Chart.defaults.global.defaultFontColor = "white";
+
+      var ctx = document.getElementById("myChart").getContext("2d");
+      new Chart(ctx, {
+        // The type of chart we want to create
+        type: "line",
+
+        // The data for our dataset
+        data: {
+          labels: stockLabel,
+          datasets: [
+            {
+              label: this.stockInfo.company.symbol + " Closing Price",
+              backgroundColor: "rgb(255, 255, 255, 0.4)",
+              borderColor: "rgb(255, 255, 255)",
+              data: stockData,
+              pointBackgroundColor: "blue"
+            }
+          ]
+        },
+
+        // Configuration options go here
+        options: {
+          scales: {
+            xAxes: [
+              {
+                display: true,
+                scaleLabel: {
+                  display: true,
+                  labelString: "Date"
+                }
+              }
+            ],
+            yAxes: [
+              {
+                display: true,
+                scaleLabel: {
+                  display: true,
+                  labelString: "Price"
+                }
+              }
+            ]
+          }
+        }
+      });
     }
+  },
+  mounted() {
+    this.createChart();
   }
 };
 </script>

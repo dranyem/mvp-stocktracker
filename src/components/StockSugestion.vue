@@ -1,30 +1,17 @@
 <template>
   <div id="carouselExampleInterval" class="carousel slide shadow" data-ride="carousel">
     <div class="carousel-inner">
-      <div class="carousel-item active" data-interval="3000">
+      <div
+        v-for="(item, index) in list"
+        :key="index"
+        class="carousel-item active"
+        data-interval="3000"
+      >
         <div class="card text-center shadow">
           <div class="card-body">
-            <h5 class="card-title">Stock Symbol 1</h5>
+            <h5 class="card-title">{{item}}</h5>
             <p class="card-text">Stock Name</p>
             <!-- <a href="#" class="btn btn-outline-light btn-sm">Go somewhere</a> -->
-          </div>
-        </div>
-      </div>
-      <div class="carousel-item" data-interval="3000">
-        <div class="card text-center shadow">
-          <div class="card-body">
-            <h5 class="card-title">Stock Symbol 2</h5>
-            <p class="card-text">Stock Name</p>
-            <!-- <a href="#" class="btn btn-outline-light btn-sm">Go somewhere</a> -->
-          </div>
-        </div>
-      </div>
-      <div class="carousel-item" data-interval="3000">
-        <div class="card text-center shadow">
-          <div class="card-body">
-            <h5 class="card-title">Stock Symbol 3</h5>
-            <p class="card-text">Stock Name</p>
-            <!-- <a href="#" class="btn btn-outline-light btn-sm btn-sm">Go somewhere</a> -->
           </div>
         </div>
       </div>
@@ -52,7 +39,12 @@
 
 <script>
 export default {
-  name: "StockSuggestion"
+  name: "StockSuggestion",
+  data() {
+    return {
+      list: ["a", "b", "c"]
+    };
+  }
 };
 </script>
 

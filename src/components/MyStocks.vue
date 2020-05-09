@@ -1,5 +1,11 @@
 <template>
   <div class="listContainer bg-transparent border-top border-white">
+    <div v-if="isLoading" class="d-flex justify-content-center position-fixed w-100 h-100">
+      <div class="spinner-border position-relative" style="{top: 50%}" role="status">
+        <span class="sr-only">Loading...</span>
+      </div>
+      <span class>Updating ...</span>
+    </div>
     <a
       v-if="!isListUpdated"
       class="btn btn-outline-info btn-sm mt-1 mb-0 p-1"
@@ -25,7 +31,8 @@ export default {
   },
   data() {
     return {
-      isListUpdated: true
+      isListUpdated: true,
+      isLoading: false
     };
   },
   computed: {
@@ -33,10 +40,10 @@ export default {
       return this.$store.getters.userStockList;
     }
   },
-  mount() {
-    for (var i = 0; i < this.userStockList().length; i++) {
-      const currDate = new Date().toDateString();
-      if (this.userStockList()[i].date != currDate) {
+  mounted() {
+    const currDate = new Date().toDateString();
+    for (var i = 0; i < this.$store.getters.userStockList.length; i++) {
+      if (this.$store.getters.userStockList[i].date != currDate) {
         this.isListUpdated = false;
         break;
       }
@@ -45,6 +52,12 @@ export default {
   methods: {
     updateList() {
       this.$store.dispatch("updateList");
+      this.isListUpdated = true;
+      // this.isLoading = true;
+      // setTimeout(function() {
+      //   this.$store.dispatch("updateList");
+      //   this.isLoading = false;
+      // }, 3000);
     }
   }
 };

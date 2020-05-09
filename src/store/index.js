@@ -100,7 +100,7 @@ export default new Vuex.Store({
           .get(
             "https://cloud.iexapis.com/stable/stock/" +
               payload.toLowerCase() +
-              "/batch?types=quote,company&displayPercent=true&token=" +
+              "/batch?types=quote,company,chart&chartCloseOnly=true&range=1m&displayPercent=true&token=" +
               process.env.VUE_APP_IEX_KEY
           )
           .then((response) => {
