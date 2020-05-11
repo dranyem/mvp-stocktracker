@@ -14,7 +14,6 @@
             width="25px"
             height="25px"
             :src="['https://storage.googleapis.com/iex/api/logos/'+item.stockSymbol+'.png']"
-            @error="this.displayLogo==false"
             class="ml-3 d-inline-block"
           />
           <p class="card-text">{{item.stockName}}</p>

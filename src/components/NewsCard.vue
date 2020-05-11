@@ -1,10 +1,10 @@
 <template>
-  <div class="card mb-3 shadow">
+  <div class="card mb-2 shadow h-50">
     <div class="row no-gutters">
-      <div class="col-md-3">
-        <img :src="newsInfo.urlToImage" class="card-img p-4" />
+      <div class="col-md-4">
+        <img :src="newsInfo.urlToImage" class="card-img p-1" />
       </div>
-      <div class="col-md-9">
+      <div class="col-md-8">
         <div class="card-body">
           <h5 class="card-title">{{newsInfo.title}}</h5>
           <p class="card-text text-break newsDescription">{{newsInfo.description}}</p>
@@ -31,7 +31,7 @@ export default {
 
 <style scoped>
 .card {
-  max-height: 185px;
+  /* max-height: 200px; */
 }
 p.newsDescription {
   font-size: 10px;

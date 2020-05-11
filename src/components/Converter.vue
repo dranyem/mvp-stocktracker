@@ -1,7 +1,7 @@
 <template>
   <div class="card mt-2 shadow">
     <div class="card-header">FOREX/CryptoCurrency</div>
-    <div class="card-body pt-4">
+    <div class="card-body pt-1">
       <div class="btn-group btn-group-toggle d-flex justify-content-center" data-toggle="buttons">
         <label class="btn btn-outline-light btn-sm active">
           <input @click="toggle('forex')" type="radio" name="options" checked /> FOREX
@@ -10,7 +10,7 @@
           <input @click="toggle('crypto') " type="radio" name="options" /> CryptoCurrency
         </label>
       </div>
-      <div class="row pt-3">
+      <div class="row pt-1">
         <div class="col-7">
           <div class="input-group">
             <div v-if="this.selected=='forex'" class="input-group-prepend">
@@ -61,6 +61,12 @@
         </div>
       </div>
       <p class="text-center">{{conversionString}}</p>
+    </div>
+    <div class="card-footer p-0">
+      <p class="text-center text-muted my-2" style="font-size: 12px">
+        Currency Exchange Data provided by:
+        <a href="https://www.alphavantage.co/">AlphaVantage</a>
+      </p>
     </div>
   </div>
 </template>
