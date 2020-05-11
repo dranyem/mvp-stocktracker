@@ -1,50 +1,48 @@
 <template>
-  <div id="carouselExampleInterval" class="carousel slide shadow" data-ride="carousel">
-    <div class="carousel-inner">
-      <div
-        v-for="(item, index) in list"
-        :key="index"
-        class="carousel-item active"
-        data-interval="3000"
-      >
-        <div class="card text-center shadow">
-          <div class="card-body">
-            <h5 class="card-title">{{item}}</h5>
-            <p class="card-text">Stock Name</p>
-            <!-- <a href="#" class="btn btn-outline-light btn-sm">Go somewhere</a> -->
-          </div>
+  <div>
+    <div
+      v-for="(item, index) in list"
+      :key="index"
+      class="carousel-item"
+      :class="[index==0? 'active':'']"
+      data-interval="3000"
+    >
+      <div class="card text-center shadow">
+        <div class="card-body">
+          <h5 class="card-title d-inline-block">{{item.stockSymbol}}</h5>
+          <img
+            width="25px"
+            height="25px"
+            :src="['https://storage.googleapis.com/iex/api/logos/'+item.stockSymbol+'.png']"
+            @error="this.displayLogo==false"
+            class="ml-3 d-inline-block"
+          />
+          <p class="card-text">{{item.stockName}}</p>
+          <a @click="displayModal(item.stockSymbol)" class="stretched-link"></a>
         </div>
       </div>
     </div>
-    <a
-      class="carousel-control-prev"
-      href="#carouselExampleInterval"
-      role="button"
-      data-slide="prev"
-    >
-      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-      <span class="sr-only">Previous</span>
-    </a>
-    <a
-      class="carousel-control-next"
-      href="#carouselExampleInterval"
-      role="button"
-      data-slide="next"
-    >
-      <span class="carousel-control-next-icon" aria-hidden="true"></span>
-      <span class="sr-only">Next</span>
-    </a>
   </div>
 </template>
 
 <script>
+import PopularStocksList from "../json/popularstocks.json";
 export default {
   name: "StockSuggestion",
   data() {
     return {
-      list: ["a", "b", "c"]
+      list: PopularStocksList,
+      displayLogo: true
     };
+  },
+  methods: {
+    displayModal(data) {
+      this.$store.dispatch("displayModal", data);
+    }
   }
+  // computed: {
+  //   list() {}
+  // }
 };
 </script>
 

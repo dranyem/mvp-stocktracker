@@ -98,7 +98,7 @@
               class="btn btn-info btn-lg btn-block mt-3 text-break"
             >Click here to view chart for this stock</a>-->
             <hr />
-            <h5 class="card-title text-center">Stock Chart</h5>
+            <h5 class="card-title text-center">Stock Chart - One Month</h5>
             <div>
               <canvas id="myChart"></canvas>
             </div>

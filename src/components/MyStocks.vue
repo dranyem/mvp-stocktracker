@@ -55,7 +55,7 @@ export default {
       this.isListUpdated = true;
       // this.isLoading = true;
       // setTimeout(function() {
-      //   this.$store.dispatch("updateList");
+      this.$store.dispatch("updateList");
       //   this.isLoading = false;
       // }, 3000);
     }

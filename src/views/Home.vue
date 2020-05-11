@@ -3,7 +3,7 @@
     <MyStocks />
     <StockInfoModal v-if="!isModalHidden" :stockInfo="stock" />
     <div class="row">
-      <div class="col-sm-4">
+      <div class="col-lg-4">
         <div class>
           <Converter />
         </div>
@@ -11,7 +11,7 @@
           <PopularStocks />
         </div>
       </div>
-      <div class="col-sm-8">
+      <div class="col-lg-8">
         <NewsSection />
       </div>
     </div>

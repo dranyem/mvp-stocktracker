@@ -20,7 +20,7 @@
                 data-toggle="dropdown"
                 aria-haspopup="true"
                 aria-expanded="false"
-              >FOREX</button>
+              >{{this.selectedCurrency}}</button>
               <div class="dropdown-menu">
                 <a
                   v-for="(item, index) in physicalCurrency"
@@ -37,7 +37,7 @@
                 data-toggle="dropdown"
                 aria-haspopup="true"
                 aria-expanded="false"
-              >Crypto</button>
+              >{{this.selectedCurrency}}</button>
               <div class="dropdown-menu">
                 <a
                   v-for="(item, index) in digitalCurrency"
@@ -52,13 +52,15 @@
               class="form-control"
               aria-label="Text input with dropdown button"
               v-model="value"
+              disabled
             />
           </div>
         </div>
         <div class="col-5">
-          <h4 class="pt-2">0.00 CAD</h4>
+          <h6 class="pt-2">{{convertedValue.toFixed(2)}} CAD</h6>
         </div>
       </div>
+      <p class="text-center">{{conversionString}}</p>
     </div>
   </div>
 </template>
@@ -66,23 +68,71 @@
 <script>
 import physicalCurrencyList from "../json/physicalcurrencylist.json";
 import digitalCurrencyList from "../json/digitalcurrencylist.json";
+import axios from "axios";
 export default {
   name: "PopularStocks",
   data() {
     return {
       value: "",
+      convertedValue: 0.0,
       selected: "forex",
       physicalCurrency: physicalCurrencyList,
-      digitalCurrency: digitalCurrencyList
+      digitalCurrency: digitalCurrencyList,
+      selectedCurrency: "FOREX",
+      conversionString: ""
     };
   },
   methods: {
     toggle(data) {
       this.selected = data;
-      console.log(this.selected);
+      this.selectedCurrency = data.toUpperCase();
+      this.value = "";
+      this.conversionString = "";
+      this.convertedValue = 0.0;
     },
-    convertDC(data) {},
-    convertPC(data) {}
+    convertDC(data) {
+      this.selectedCurrency = data;
+      this.value = 1.0;
+      axios
+        .get(
+          "https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE&from_currency=" +
+            data +
+            "&to_currency=CAD&apikey=" +
+            process.env.VUE_APP_ALPHAVANTAGE_KEY6
+        )
+        .then(response => {
+          console.log(response.data);
+          this.convertedValue = Number(
+            response.data["Realtime Currency Exchange Rate"]["5. Exchange Rate"]
+          );
+          this.conversionString =
+            data + " 1.00 = CAD " + this.convertedValue.toFixed(2);
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
+    convertPC(data) {
+      this.selectedCurrency = data;
+      this.convertedValue = 1.0;
+      axios
+        .get(
+          "https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE&from_currency=CAD&to_currency=" +
+            data +
+            "&apikey=" +
+            process.env.VUE_APP_ALPHAVANTAGE_KEY6
+        )
+        .then(response => {
+          console.log(response.data);
+          this.value = Number(
+            response.data["Realtime Currency Exchange Rate"]["5. Exchange Rate"]
+          );
+          this.conversionString = data + " " + this.value + " = CAD 1.00";
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    }
   }
 };
 </script>
